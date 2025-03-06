@@ -7,7 +7,113 @@ replace (/replaceFirst)
 split
  */
 
+fun String.fff(){
+
+}
+
+fun weirdEarnPerHourExample(): Boolean{
+
+    val pattern = Regex("""(\d+(?= Euros)).*(\d+(?= hours?))""", RegexOption.IGNORE_CASE)
+//    pattern.fin
+    val inputString = """
+        Tim earns 10 Euros every 2 hours.
+        Sarah earns 15 Euros every 1 hour.
+        John earns 5 euros every 3 hours.
+        Mike earns 5 Euros every 2 hour.
+    """.trimIndent()
+    val matches = pattern.findAll(inputString)
+    //IMPORTANT THIS LINE
+    matches.map { it.groups.map { "${it!!.value} - ${it!!.range}" } }.forEach(::println)
+    matches.map { it.destructured }.forEach { (amount,hours) ->
+        println("${(amount.toFloat() / hours.toFloat())} per 1 hour")
+    }
+    return true
+}
+/*
+5.0 per 1 hour
+15.0 per 1 hour
+1.6666666 per 1 hour
+2.5 per 1 hour
+ */
+
+fun abc() {
+    //
+    val STR = """I like dogs, but not lions.
+I like dogs, but not tigers.
+I like penguins, but not lions.
+I like penguins, but not tigers.""".trimIndent()
+    println("--${STR}--")
+
+    val pat = """^I like (dogs|penguins), but not (lions|tigers).$""".toRegex(RegexOption.MULTILINE)
+    val ee = pat.findAll(STR) //sort of like the global flag
+    println(ee.javaClass.simpleName)
+    println("ee: Seq MatchRersult")
+    ee.forEach {
+        println(it.javaClass.simpleName)
+        println("Matches: ${it.groups.size}")
+        println("Whole sentence ")
+        it.groups.forEach {
+            println("    ${it}")
+        }
+    }
+    destr()
+}
+
+
+fun destr(){
+    val pa = """(\w+) (\w+).*""".toRegex()
+    pa.matchEntire("Here is a word")?.destructured?.let { (first, second) ->
+        println("---")
+        println(first)
+        println(second)
+    }
+}
+
+
+fun showRegexMatchesVisually(strToSearch: String, pattern: Regex) {
+    println("Matches...")
+    val a = pattern.containsMatchIn(strToSearch)
+    val mm = pattern.find(strToSearch)
+    println(a)
+    val e: MatchGroup? = mm!!.groups.first()
+    println(e)
+
+    println("---")
+
+}
+
+//fun findAllInstances
+
+//fun replace
+// Everything after this is in red
+val red = "\u001b[31m"
+val green = "\u001b[32m"
+
+// Resets previous color codes
+val reset = "\u001b[0m"
+
+
+fun cleanup() {
+    val input = "aaabbbccc"
+    val out = """a?bbbccc""".toRegex().find(input)
+    println(out!!.groups.toString())
+    println("${red}test${reset}")
+    input.forEachIndexed { index, c ->
+        print("${green}${c}${reset}")
+    }
+
+
+}
+
 fun main() {
+    weirdEarnPerHourExample()
+    System.exit(0)
+    abc()
+    System.exit(0)
+    cleanup()
+    System.exit(0)
+    showRegexMatchesVisually("aaabbbccc", """a{1,2}""".toRegex())
+    System.exit(0)
     println("Hello World!")
     val t = """.*""".toRegex()
     val c = "hello"
@@ -21,19 +127,19 @@ fun main() {
     splitter()
 }
 
-fun splitter(){
+fun splitter() {
     val regex = """\W+""".toRegex()
     val beautiful = "Roses are red, Violets are blue"
 
     println(regex.split(beautiful))
 }
 
-fun groups(){
+fun groups() {
     val a = """(xyz)x""".toRegex()
     //change x to be (x) and see result!
     val b = "xyz yz xyzx xzy"
     val c = a.findAll(b)
-    printAllMatchResult(c,a.toString(), b)
+    printAllMatchResult(c, a.toString(), b)
     /*
     Regex pattern is : (xyz)x
     Str was: xyz yz xyzx xzy
@@ -59,7 +165,7 @@ Regex pattern is : (xyz)x
 }
 
 
-fun meta(){
+fun meta() {
     val a = """\s+""".toRegex()
     val b = ""
     val c = a.matches(b)
@@ -149,9 +255,9 @@ fun test() {
     val matchResult = regex.matchEntire("abbccbbd")
     println(printMatchResult(matchResult, regex.toString(), "abbccbbd"))
     val fin = regex.find("abcbabbd")
-    println(printMatchResult(fin, regex.toString(),"abcbabbd"))
+    println(printMatchResult(fin, regex.toString(), "abcbabbd"))
     val finA = regex.findAll("abcb abbd")
-    println(printAllMatchResult(finA, regex.toString(),"abcb abbd"))
+    println(printAllMatchResult(finA, regex.toString(), "abcb abbd"))
 
 }
 
@@ -167,7 +273,7 @@ val matchResult = regex.find("abcb abbd")
 assertEquals("abcb", matchResult.value)
  */
 
-fun printAllMatchResult(mr: Sequence<MatchResult>?, pattern: String,orig: String): String {
+fun printAllMatchResult(mr: Sequence<MatchResult>?, pattern: String, orig: String): String {
     println("____")
     println("ALL")
     println("____")
@@ -176,7 +282,7 @@ fun printAllMatchResult(mr: Sequence<MatchResult>?, pattern: String,orig: String
         return "-"
     } else {
         println("Regex pattern is : ${pattern}")
-        mr.forEachIndexed { index, matchResult ->  println(printMatchResult(matchResult, pattern, orig)) }
+        mr.forEachIndexed { index, matchResult -> println(printMatchResult(matchResult, pattern, orig)) }
         println("=====")
         return ""
     }
@@ -192,7 +298,7 @@ fun printMatchResult(mr: MatchResult?, pattern: String, orig: String): String {
         println(mr.range)
         println(mr.groups)
         mr.groups.forEachIndexed { index, matchGroup -> println("${index} -> ${matchGroup?.value} at ${matchGroup?.range}") }
-        mr.groupValues.forEachIndexed { index, s ->  println("${index} = ${s}") }
+        mr.groupValues.forEachIndexed { index, s -> println("${index} = ${s}") }
         println("=====")
         return ""
     }
