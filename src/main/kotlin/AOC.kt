@@ -47,9 +47,11 @@ fun part1(inputLines: List<String>) {
 }
 
 fun part2(inputLines: List<String> ) {
-    val doAndDonts = """.+?(?=do|don\'t)""".toRegex().find(inputLines.joinToString(""))
+    //Find the muls that come from the start of the file BEFORE any do or dont
+    //as the challenge states that the muls are by default enabled
+    val doAndDontsBeforeFirstDoDont = """.+?(?=do|don't)""".toRegex().find(inputLines.joinToString(""))
     var incrementer = 0
-    doAndDonts?.let {
+    doAndDontsBeforeFirstDoDont?.let {
         val justOperations = """mul\([0-9]{1,3},[0-9]{1,3}\)""".toRegex().findAll(it.groupValues[0])
         justOperations.forEach { me ->
             val splitValues = splitToMul(me.groupValues[0])
@@ -57,8 +59,11 @@ fun part2(inputLines: List<String> ) {
         }
     }
 
+    //Ignoring the first chunck of muls that come before the first do or dont in the file
+    //look for any chunk with do and NO dont with mulls
     val out = """do\(\)((?!don't\(\)).)*mul\([0-9]{1,3},[0-9]{1,3}\)""".toRegex().findAll(inputLines.joinToString(""))
     val sol = out.map {
+        //go through the smaller found string and search for all mulls
         val multipleSplitValues = splitToMultipleMul(it.groupValues[0])
         multipleSplitValues
     }.sum() + incrementer
@@ -66,7 +71,3 @@ fun part2(inputLines: List<String> ) {
     println("Part 2 Answer: ${sol}")
     checkAnswer(sol, 118173507)
 }
-
-//answers:
-//part1:184576302
-//part2:118173507
