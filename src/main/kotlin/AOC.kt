@@ -46,7 +46,7 @@ fun part1(inputLines: List<String>) {
     checkAnswer(part1Answer, 184576302)
 }
 
-fun part2(inputLines: List<String> ) {
+fun part2(inputLines: List<String>) {
     //Find the muls that come from the start of the file BEFORE any do or dont
     //as the challenge states that the muls are by default enabled
     val doAndDontsBeforeFirstDoDont = """.+?(?=do|don't)""".toRegex().find(inputLines.joinToString(""))
